@@ -31,7 +31,6 @@ let main argv =
 
     doc.Write("cmd_result.svg")
 
-    // Example of SVG lib usage
     //let svg = SvgDocument()
 
     //let text = SvgText(res)
