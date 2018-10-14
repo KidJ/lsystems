@@ -1,0 +1,6 @@
+﻿
+
+Using Strings as tokens is not necessary, perhaps is introducting unecessary layer of abstraction?
+Not sure that the flexibility to map the rule set on to other commands is really required, given the amount of coupling there naturally is between these things
+
+SVGRendering library seems a bit shit, incredibly verbose. Nice to have png option though.
