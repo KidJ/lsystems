@@ -71,7 +71,7 @@ module LSystem =
     let rec step (input : string) (rules : Rule list) : string =
         if input.Length > 0 then
             // match all rules against input string
-            let matchingRules = rules |> List.filter (fun rule -> rule.Expr = input.Substring(0,rule.Expr.Length))
+            let matchingRules = rules |> List.filter (fun rule -> rule.Expr.Length <= input.Length && rule.Expr = input.Substring(0,rule.Expr.Length))
 
             if not <| List.isEmpty matchingRules then
                 // select matching rule from those with greatest length

@@ -1,6 +1,8 @@
-﻿
+﻿Plan
 
 Using Strings as tokens is not necessary, perhaps is introducting unecessary layer of abstraction?
 Not sure that the flexibility to map the rule set on to other commands is really required, given the amount of coupling there naturally is between these things
 
-SVGRendering library seems a bit shit, incredibly verbose. Nice to have png option though.
+However, the abstraction between the rule generation and rendering *is* powerful, as this enables the same l-system to target many different visualisation methods.
+
+SVGRendering library seems a bit shit, incredibly verbose. Nice to have svg/png option.

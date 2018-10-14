@@ -6,42 +6,26 @@ open Svg
 open LSystem
 open LSystem.SVG
 
-module Translator = 
-
-    let toRadians (x : float32) = x * (float32)Math.PI / 180.0f
-
-    let translate = function
-        | 'a' -> Renderer.DrawLine (Renderer.makeLine (Utils.makeVector2 0.0f 0.0f) (Utils.makeVector2 25.0f 0.0f))
-        | 'b' -> Renderer.Rotate (toRadians 10.0f)
-        | 'c' -> Renderer.Rotate (toRadians -10.0f)
-        | 'd' -> Renderer.Rotate (toRadians 180.0f)
-        | _ as ruhroh -> failwithf "Invalid input \"%A\"!" ruhroh 
-
 [<EntryPoint>]
 let main argv =
-    
-    let rng = System.Random()
 
-    let rules = 
-        [
-            //LSystem.makeRule "a" "ab";
-            LSystem.makeWeightedRandomRule "a" [ (20.0, "b"); (2.0, "c"); (1.0, "d") ] rng
-            //LSystem.makeWeightedRandomRule "b" [ (1.0, "b"); (1.0, "d") ] rng
-            //LSystem.makeRule "ababa" "c";
-            //LSystem.makeRule "c" "caaa";
-            //LSystem.makeRule "aaaa" "aaac";
-        ]
+    //let rng = System.Random()
+    //let rules = 
+    //    [
+    //        LSystem.makeWeightedRandomRule "a" [ (20.0, "b"); (2.0, "c"); (1.0, "d") ] rng
+    //    ]
 
-    let input = String.replicate 1000 "a"
+    let input = "a"
 
     // generate until termination (iteration count or until rules fail to apply)
-    let res = LSystem.evaluate input rules 1
+    let res = LSystem.evaluate input Systems.LineWalker.rules 10
 
     printfn "%A" res
     //let counts = res |> Seq.countBy id 
     //printfn "%A" counts
 
-    let cmds = List.init res.Length (fun i -> Translator.translate res.[i])
+    //let cmds = List.init res.Length (fun i -> Translator.translate res.[i])
+    let cmds = Systems.LineWalker.makeRenderCommands res
 
     let doc = Renderer.processCommands cmds
 
