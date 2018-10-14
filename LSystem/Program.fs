@@ -8,15 +8,14 @@ open LSystem.SVG
 
 module Translator = 
 
-    let toRadians x = x * Math.PI / 180.0
+    let toRadians (x : float32) = x * (float32)Math.PI / 180.0f
 
     let translate = function
-        | 'a' -> Renderer.DrawLine (Renderer.makeLine (Renderer.makeVector2 0.0f 0.0f) (Renderer.makeVector2 25.0f 0.0f))
-        | 'b' -> Renderer.Rotate (toRadians 10.0)
-        | 'c' -> Renderer.Rotate (toRadians -10.0)
-        | 'd' -> Renderer.Rotate (toRadians 180.0)
+        | 'a' -> Renderer.DrawLine (Renderer.makeLine (Utils.makeVector2 0.0f 0.0f) (Utils.makeVector2 25.0f 0.0f))
+        | 'b' -> Renderer.Rotate (toRadians 10.0f)
+        | 'c' -> Renderer.Rotate (toRadians -10.0f)
+        | 'd' -> Renderer.Rotate (toRadians 180.0f)
         | _ as ruhroh -> failwithf "Invalid input \"%A\"!" ruhroh 
-
 
 [<EntryPoint>]
 let main argv =

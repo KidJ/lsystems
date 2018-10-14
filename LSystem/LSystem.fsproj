@@ -46,11 +46,14 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Utils.fs" />
     <Compile Include="SVGRenderer.fs" />
     <Compile Include="D:\dev\lsystem\LSystem\lsystem.fs" />
+    <Compile Include="LineWalker.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
+    <None Include="LSystem.plan" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
