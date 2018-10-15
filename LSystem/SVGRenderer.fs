@@ -33,6 +33,13 @@ module Renderer =
         let transformLine (offset : Vector2) (theta : float32) (line : Line)  =
             line |> rotateLine theta |> offsetLine offset
 
+        type Rect =
+            {
+                Position : Vector2
+                Width : float32
+                Height : float32
+            }
+    
     open Primitives
 
     // Rendering primitives that will can be re-used by many different algorithms.

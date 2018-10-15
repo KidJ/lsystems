@@ -1,31 +1,35 @@
 ﻿open System
+open System.Numerics
 open System.Drawing
 
 open Svg
 
 open LSystem
+open LSystem.Systems
 open LSystem.SVG
 
 [<EntryPoint>]
 let main argv =
 
-    //let rng = System.Random()
-    //let rules = 
-    //    [
-    //        LSystem.makeWeightedRandomRule "a" [ (20.0, "b"); (2.0, "c"); (1.0, "d") ] rng
-    //    ]
+    let p : LineWalkerParams =
+        {
+            StartPosition = Utils.makeVector2 300.0f 0.0f
+            Line = Renderer.Primitives.makeLine Vector2.Zero (Utils.makeVector2 0.0f 15.0f);
+            Theta = 10.0f |> Utils.radians;
+        }
+    let lineWalker = LineWalker.make p
 
     let input = "a"
 
     // generate until termination (iteration count or until rules fail to apply)
-    let res = LSystem.evaluate input Systems.LineWalker.rules 10
+    let res = LSystem.evaluate input lineWalker.Rules 8
 
     printfn "%A" res
     //let counts = res |> Seq.countBy id 
     //printfn "%A" counts
 
     //let cmds = List.init res.Length (fun i -> Translator.translate res.[i])
-    let cmds = Systems.LineWalker.makeRenderCommands res
+    let cmds = Systems.LineWalker.makeRenderCommands lineWalker res
 
     let doc = Renderer.processCommands cmds
 

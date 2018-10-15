@@ -1,5 +1,8 @@
 ﻿Plan
 
+- Make tree branch style rendering, supporting push/pop render state in linewalker should just about do it
+- Add rect support to svg renderer
+
 Using Strings as tokens is not necessary, perhaps is introducting unecessary layer of abstraction?
 Not sure that the flexibility to map the rule set on to other commands is really required, given the amount of coupling there naturally is between these things
 

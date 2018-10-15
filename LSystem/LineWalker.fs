@@ -5,8 +5,37 @@ open LSystem.SVG
 
 open System.Numerics
 
+type LineWalkerParams =
+    {
+        StartPosition : Vector2
+        Line : Renderer.Primitives.Line
+        Theta : float32
+    }
+
+type LineWalker = 
+    {
+        Params : LineWalkerParams
+        Rules : LSystem.Rule list
+    }
+
 // Walks through space drawing lines with random rotations.
 module LineWalker =
+
+    open Renderer
+
+    type internal State =
+        {
+            Position : Vector2
+            Rotation : float32
+            Commands : RenderCommand list
+        }
+
+    let internal makeInitialState (lineWalker : LineWalker) : State =
+        {
+            Position = lineWalker.Params.StartPosition;
+            Rotation = lineWalker.Params.Theta;
+            Commands = [];
+        }
 
     let rules =
         let rng = System.Random()
@@ -15,40 +44,23 @@ module LineWalker =
             LSystem.makeWeightedRandomRule "b" [ (1.0, "b"); (2.0, "ba") ] rng
             LSystem.makeWeightedRandomRule "c" [ (1.0, "c"); (2.0, "ca") ] rng
         ]
+
+    let make (p : LineWalkerParams) : LineWalker =
+        {
+            Params = p;
+            Rules = rules;
+        }
     
     type Token =
         | Line of Renderer.Primitives.Line
         | Rotate of float32
         | Move of Vector2
 
-    open Renderer
-
-    let lineLength = 20.0f
-    let rotation = 25.0f
-
-    let defaultLine =
-        Primitives.makeLine Vector2.Zero (Utils.makeVector2 50.0f 0.0f)
-
-    let internal tokenise = function
-        | 'a' -> [ Line <| defaultLine ]
-        | 'b' -> [ Rotate rotation ]
-        | 'c' -> [ Rotate -rotation ]
+    let internal tokenise (p : LineWalkerParams) = function
+        | 'a' -> [ Line <| p.Line ]
+        | 'b' -> [ Rotate p.Theta ]
+        | 'c' -> [ Rotate -p.Theta ]
         | _ as unmatched -> failwithf "Unrecognised character encountered %A" unmatched
-
-    
-    type internal State =
-        {
-            Position : Vector2
-            Rotation : float32
-            Commands : RenderCommand list
-        }
-
-    let internal startingState =
-        {
-            Position = Utils.makeVector2 25.0f 250.0f;
-            Rotation = 0.0f;
-            Commands = []
-        }
 
     let internal processToken (state : State) (tok : Token) : State =
         match tok with 
@@ -60,11 +72,12 @@ module LineWalker =
                 Commands = (DrawLine l') :: state.Commands
             }
         | Rotate theta -> { state with Rotation = state.Rotation + theta }
-        | Move offset -> { state with Position = state.Position + (Utils.rotate offset (Utils.radians state.Rotation)) }
+        | Move offset -> { state with Position = state.Position + (Utils.rotate offset state.Rotation) }
 
-    let makeRenderCommands (stream : string) : Renderer.RenderCommand list =
-        let tokenised = stream |> Seq.map tokenise |> Seq.concat |> List.ofSeq
-        let states = tokenised |> List.scan (processToken) startingState
+    let makeRenderCommands (lineWalker : LineWalker) (stream : string) : Renderer.RenderCommand list =
+        let tokenised = stream |> Seq.map (tokenise lineWalker.Params) |> Seq.concat |> List.ofSeq
+        let state = makeInitialState lineWalker
+        let states = tokenised |> List.scan (processToken) state
 
         // as we append most recent command as head, finally reverse list!
         List.rev <| (List.last states).Commands
