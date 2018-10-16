@@ -97,7 +97,7 @@ module LSystem =
 
         let results = evaluateInner input rules iterations
 
-        results |> List.iteri (fun i str -> printfn "%d : %s" i str)
+        //results |> List.iteri (fun i str -> printfn "%d : %s" i str)
 
         results |> List.rev |> List.head
         
