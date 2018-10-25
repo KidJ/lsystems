@@ -29,19 +29,13 @@ let main argv =
         | '-' -> [ Rotate p.Theta ]
         | '+' -> [ Rotate -p.Theta ]
         | _ as unmatched -> failwithf "Unrecognised character encountered %A" unmatched
-        //let rng = System.Random()
-        //[
-        //    LSystem.makeWeightedRandomRule "a" [ (1.0, "aa"); (1.0, "ab"); (1.0, "ac") ] rng
-        //    LSystem.makeWeightedRandomRule "b" [ (1.0, "b"); (2.0, "ba") ] rng
-        //    LSystem.makeWeightedRandomRule "c" [ (1.0, "c"); (2.0, "ca") ] rng
-        //]
-
+    
     let lineWalker = LineWalker.make p rules tokenise 
 
     let input = "F+F+F+F"
 
     // generate until termination (iteration count or until rules fail to apply)
-    let res = LSystem.evaluate input lineWalker.Rules 5
+    let res = LSystem.evaluate input lineWalker.Rules 4
 
     printfn "%A" res
     //let counts = res |> Seq.countBy id 
@@ -75,7 +69,7 @@ let main argv =
     //svg.Children.Add(c)
 
     //svg.Write("result.svg")
-    //let bitmap = svg.Draw()
-    //bitmap.Save("result.bmp")
+    let bitmap = doc.Draw()
+    bitmap.Save("result.bmp")
 
     0

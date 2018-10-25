@@ -68,22 +68,25 @@ module LSystem =
     //            | a when a = List.empty -> None
     //            | a -> Some (rules |> List.item (rng.Next(0, List.length rules)))
 
-    let rec step (input : string) (rules : Rule list) : string =
-        if input.Length > 0 then
+    let step (input : string) (rules : Rule list) : string =
+        let builder = System.Text.StringBuilder()
+        let mutable start = 0
+        while start < input.Length do
             // match all rules against input string
-            let matchingRules = rules |> List.filter (fun rule -> rule.Expr.Length <= input.Length && rule.Expr = input.Substring(0,rule.Expr.Length))
+            let remainder = input.Length - start
+            let matchingRules = rules |> List.filter (fun rule -> rule.Expr.Length <= remainder && rule.Expr = input.Substring(start,rule.Expr.Length))
 
             if not <| List.isEmpty matchingRules then
-                // select matching rule from those with greatest length
+                // select matching rule with greatest length
                 let r = matchingRules |> List.sortByDescending (fun rule -> rule.Expr.Length) |> List.head
-                let remainder = input.Substring(r.Expr.Length)
-                r.ResultExpr() + (step remainder rules)
+                builder.Append(r.ResultExpr()) |> ignore
+                start <- start + r.Expr.Length
             else
-                // *shudders*
-                //input.[0..1] + (step (input.[1..]) rules) //  / input.Substring(1)
-                input.Substring(0,1) + (step (input.Substring(1)) rules) // input.Substring(0,1)  / input.Substring(1)
-        else
-            ""
+                builder.Append(input.[start]) |> ignore
+                start <- start + 1
+                
+
+        string builder
 
     let rec evaluateInner (input : string) (rules : Rule list) (iterations : int) : string list =
         if iterations > 0 then
@@ -96,8 +99,6 @@ module LSystem =
         if iterations < 1 then failwithf "Must have at least one iteration"
 
         let results = evaluateInner input rules iterations
-
-        //results |> List.iteri (fun i str -> printfn "%d : %s" i str)
 
         results |> List.rev |> List.head
         
