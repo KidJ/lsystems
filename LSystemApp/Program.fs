@@ -6,33 +6,15 @@ open System.Drawing
 
 open LSystem
 open LSystem.Systems.LineWalker
+open LSystem.Systems.Examples
 open LSystem.Render
 
 module App =
 
     [<EntryPoint>]
     let main argv =
-
-        let p : LineWalkerParams =
-            {
-                StartPosition = Utils.makeVector2 1000.0f 1000.0f
-                Line = Geometry.makeLine Vector2.Zero (Utils.makeVector2 15.0f 0.0f);
-                Theta = 90.0f |> Utils.radians;
-            }
     
-        let rules =
-            let rng = System.Random()
-            [
-                LSystem.makeRule "F" "F+F-F-FF+F+F-F"
-            ]
-
-        let tokenise (p : LineWalkerParams) = function
-            | 'F' -> [ Line p.Line ]
-            | '-' -> [ Rotate p.Theta ]
-            | '+' -> [ Rotate -p.Theta ]
-            | _ as unmatched -> failwithf "Unrecognised character encountered %A" unmatched
-    
-        let lineWalker = make p rules tokenise 
+        let lineWalker = make SquareLineWalker.parameters SquareLineWalker.rules SquareLineWalker.tokenise 
 
         let input = "F+F+F+F"
 

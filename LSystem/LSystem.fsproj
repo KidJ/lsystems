@@ -50,6 +50,7 @@
     <Compile Include="D:\dev\lsystem\LSystem\lsystem.fs" />
     <Compile Include="Geometry.fs" />
     <Compile Include="LineWalker.fs" />
+    <Compile Include="SquareLineWalker.fs" />
     <Compile Include="SVGRenderer.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
