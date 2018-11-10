@@ -1,52 +1,18 @@
-﻿namespace LSystem.SVG
+﻿namespace LSystem.Render
 
 open System
 open System.Drawing
 open System.Numerics
 
 open LSystem
-
+open LSystem.Systems
+open Geometry
 open Svg
 
-module Renderer =
-
-    module Primitives = 
-
-        type Line = 
-            {
-                Start : Vector2
-                End  : Vector2
-            }
-
-        let makeLine s e =
-            {
-                Start = s;
-                End = e;
-            }
-
-        let rotateLine (theta : float32) (line : Line) =
-            makeLine (Utils.rotate line.Start theta) (Utils.rotate line.End theta)
-
-        let offsetLine (offset : Vector2) (line : Line)  =
-            makeLine (line.Start + offset) (line.End + offset)
-
-        let transformLine (offset : Vector2) (theta : float32) (line : Line)  =
-            line |> rotateLine theta |> offsetLine offset
-
-        type Rect =
-            {
-                Position : Vector2
-                Width : float32
-                Height : float32
-            }
-    
-    open Primitives
+module SVGRenderer =
 
     // Rendering primitives that will can be re-used by many different algorithms.
-    type RenderCommand =
-        | DrawLine of Line
-        //| DrawRect of Rect
-
+    // E.g. draw rect, draw circle, shading, etc.
     let addLine (doc : SvgDocument byref) (line : Line) =
 
         let l = SvgLine()
@@ -59,9 +25,9 @@ module Renderer =
         doc.Children.Add(l)
     
     let internal processCommand (doc : SvgDocument byref) = function
-        | DrawLine line -> addLine &doc line
+        | LineWalker.DrawLine line -> addLine &doc line
     
-    let processCommands (commands : RenderCommand list) : SvgDocument =
+    let processCommands (commands : LineWalker.RenderCommand list) : SvgDocument =
     
         let mutable svg = SvgDocument()
 

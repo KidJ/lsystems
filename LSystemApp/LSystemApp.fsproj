@@ -5,14 +5,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>41c439c3-536d-41b5-aa8b-2d7cacdc721a</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>LSystem</RootNamespace>
-    <AssemblyName>LSystem</AssemblyName>
+    <ProjectGuid>4f837986-841e-483c-864e-6b901ea25fcc</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LSystemApp</RootNamespace>
+    <AssemblyName>LSystemApp</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <UseStandardResourceNames>true</UseStandardResourceNames>
-    <Name>LSystem</Name>
+    <Name>LSystemApp</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,36 +46,35 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Utils.fs" />
-    <Compile Include="D:\dev\lsystem\LSystem\lsystem.fs" />
-    <Compile Include="Geometry.fs" />
-    <Compile Include="LineWalker.fs" />
-    <Compile Include="SVGRenderer.fs" />
+    <Compile Include="Program.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
-    <None Include="LSystem.plan" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
-      <HintPath>packages\FSharp.Core.4.5.2\lib\net45\FSharp.Core.dll</HintPath>
+      <HintPath>..\LSystem\packages\FSharp.Core.4.5.2\lib\net45\FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Svg">
-      <HintPath>packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
+      <HintPath>..\LSystem\packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.ValueTuple">
-      <HintPath>packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <HintPath>..\LSystem\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) D:\dev\unity\ProcJam2018\Assets</PostBuildEvent>
-  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LSystem\LSystem.fsproj">
+      <Name>LSystem</Name>
+      <Project>{41c439c3-536d-41b5-aa8b-2d7cacdc721a}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

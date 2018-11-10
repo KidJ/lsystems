@@ -1,8 +1,12 @@
 ﻿Plan
 
+- Implement renderer that just outputs array of 3d points from same command list
+	- do this in c# seeing as unity types accessible there?
+- Make dll
+- Implement better dll interface for Unity
+
 - Implement some different renderings using line walker
 
-- Fix recursion bug
 
 - Make tree branch style rendering, supporting push/pop render state in linewalker should just about do it
 - Add rect support to svg renderer

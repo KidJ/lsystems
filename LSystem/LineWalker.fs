@@ -1,34 +1,34 @@
-﻿namespace LSystem.Systems.LineWalker
+﻿namespace LSystem.Systems
 
 open LSystem
-open LSystem.SVG
-
 open System.Numerics
-
-type LineWalkerParams =
-    {
-        StartPosition : Vector2
-        Line : Renderer.Primitives.Line
-        Theta : float32
-    }
-
-type Token =
-    | Line of Renderer.Primitives.Line
-    | Rotate of float32
-    | Move of Vector2
-
-type LineWalker = 
-    {
-        Params : LineWalkerParams
-        Rules : LSystem.Rule list
-        Tokeniser : LineWalkerParams -> char -> Token list
-    }
 
 // Walks through space drawing lines with random rotations.
 module LineWalker =
 
-    open Renderer
+    type Token =
+        | Line of Geometry.Line
+        | Rotate of float32
+        | Move of Vector2
 
+    type LineWalkerParams =
+        {
+            StartPosition : Vector2
+            Line : Geometry.Line
+            Theta : float32
+        }
+
+    type RenderCommand =
+        | DrawLine of Geometry.Line
+        //| DrawRect of Rect
+
+    type LineWalker = 
+        {
+            Params : LineWalkerParams
+            Rules : LSystem.Rule list
+            Tokeniser : LineWalkerParams -> char -> Token list
+        }
+    
     type internal State =
         {
             Position : Vector2
@@ -53,7 +53,7 @@ module LineWalker =
     let internal processToken (state : State) (tok : Token) : State =
         match tok with 
         | Line l ->
-            let l' = (l |> Renderer.Primitives.transformLine state.Position state.Rotation)
+            let l' = (l |> Geometry.transformLine state.Position state.Rotation)
             {
                 Position = l'.End
                 Rotation = state.Rotation
@@ -62,7 +62,7 @@ module LineWalker =
         | Rotate theta -> { state with Rotation = state.Rotation + theta }
         | Move offset -> { state with Position = state.Position + (Utils.rotate offset state.Rotation) }
 
-    let makeRenderCommands (lineWalker : LineWalker) (stream : string) : Renderer.RenderCommand list =
+    let makeRenderCommands (lineWalker : LineWalker) (stream : string) : RenderCommand list =
         let tokenised = stream |> Seq.map (lineWalker.Tokeniser lineWalker.Params) |> Seq.concat |> List.ofSeq
         let state = makeInitialState lineWalker
         let states = tokenised |> List.scan (processToken) state
